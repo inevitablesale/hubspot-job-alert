@@ -50,3 +50,11 @@ Render uses the provided commands:
 - Job extraction gathers likely listing links, fetches detail pages, and captures titles/snippets.
 - A lightweight classifier assigns tags and a relevance score based on keywords and domain context.
 
+## How domain crawling works
+1. **Load the canonical list** – On startup the API reads the JSON list from `DOMAINS_FILE` (expected at `/etc/secrets/DOMAINS_FILE`) and upserts each company into the `domains` table so every crawl is anchored to that source of truth. 
+2. **Spin up a run** – When `/api/run` is invoked, a crawl run is created in SQLite and a background coroutine iterates through the selected domains. Each domain record provides the `website` that seeds navigation. 
+3. **Locate a careers page** – For every domain the crawler opens the homepage in Playwright, scans all anchors for career-related keywords, and also probes common paths like `/careers` or `/jobs`. The highest-confidence URL is returned as the careers page candidate. 
+4. **Discover job links** – The crawler loads the careers page and collects candidate postings in two passes: (a) ATS-aware selectors for Greenhouse, Lever, Workable, Ashby, and Breezy; and (b) keyword-heavy anchors or URLs that mention jobs or careers. 
+5. **Scrape details** – Each candidate job URL is opened, headings are captured as titles, location and remote hints are parsed from page text, and an apply link is pulled from action-oriented anchors. A snippet from the body is included for quick preview.
+6. **Classify and store** – The scraped job is scored and tagged, then persisted with the run ID so `/api/status`, `/api/results`, and `/api/logs` reflect progress domain by domain.
+
