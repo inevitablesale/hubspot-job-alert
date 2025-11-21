@@ -1,7 +1,13 @@
 """Playwright browser helpers."""
 from __future__ import annotations
+import os
 from contextlib import asynccontextmanager
 from playwright.async_api import async_playwright, BrowserContext
+
+# Ensure Playwright uses the same browser cache path at runtime that we used during
+# postinstall. Render builds install browsers into /tmp/playwright-browsers, so we
+# point the runtime lookup there if the environment is not already configured.
+os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", "/tmp/playwright-browsers")
 from config import REQUEST_TIMEOUT
 
 
