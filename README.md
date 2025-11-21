@@ -46,6 +46,6 @@ The dashboard lets you trigger crawls, preview careers pages, export jobs to CSV
 ## Deployment
 
 - Build command: `./postinstall.sh` (install dependencies; add frontend build if desired)
-- Start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
+- Start command: `uvicorn server:app --host 0.0.0.0 --port $PORT` (import shim for Render defaults; `backend.main:app` also works)
 
 The backend listens on the `PORT` environment variable for Render compatibility.
