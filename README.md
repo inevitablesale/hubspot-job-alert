@@ -36,7 +36,7 @@ Render uses the provided commands:
 `server.py` includes all API routes and static serving configuration required for Render.
 
 ### Configuration
-- `DOMAINS_FILE` points to the source of truth for the domains to crawl (by default `data/domains.json`; in Render it is provided at `/etc/secrets/DOMAINS_FILE`). Records are upserted into SQLite on startup.
+- `DOMAINS_FILE` points to the source of truth for the domains to crawl. It must be provided via the deployment secret at `/etc/secrets/DOMAINS_FILE` (or by setting the `DOMAINS_FILE` environment variable). Records are upserted into SQLite on startup.
 - SQLite database lives at `data/jobs.db` and is created automatically.
 - Logs are written to stdout and `data/logs.txt` (rotating at 5MB).
 
