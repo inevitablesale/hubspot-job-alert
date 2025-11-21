@@ -5,7 +5,7 @@ from pydantic import BaseSettings, Field, validator
 
 
 class Settings(BaseSettings):
-    DOMAINS_FILE_PATH: str
+    DOMAINS_FILE_PATH: str = "domains.json"
     PORT: int = 8000
     HUBSPOT_ROLE_KEYWORDS: List[str] = Field(
         default_factory=lambda: [

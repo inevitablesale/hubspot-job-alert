@@ -9,12 +9,13 @@ Monitor partner domains for HubSpot-related job postings. The system discovers r
 ```bash
 cd backend
 pip install -r ../requirements.txt
+# Optional: point at a custom domains file; defaults to ../domains.json in the repo root
 export DOMAINS_FILE_PATH=../domains.json
 uvicorn backend.main:app --reload
 ```
 
 * Render start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-* Requires `DOMAINS_FILE_PATH` pointing to a JSON file of domain records.
+* Defaults to `domains.json` in the repo root; override with `DOMAINS_FILE_PATH` for your own list.
 
 ### Endpoints
 

@@ -27,12 +27,29 @@ app.add_middleware(
 
 
 def _load_state():
-    domains = load_domains_from_file(settings.DOMAINS_FILE_PATH)
+    try:
+        domains = load_domains_from_file(settings.DOMAINS_FILE_PATH)
+    except FileNotFoundError:
+        logger.error(
+            "Domains file missing; set DOMAINS_FILE_PATH or place domains.json at repo root",
+            {"path": settings.DOMAINS_FILE_PATH},
+        )
+        domains = {}
+    except Exception as exc:
+        logger.error(
+            "Failed loading domains file",
+            {"path": settings.DOMAINS_FILE_PATH, "error": str(exc)},
+        )
+        domains = {}
+
     saved_jobs = file_store.load_jobs_from_file()
     if saved_jobs:
         memory_store.JOBS.update(saved_jobs)
     memory_store.STATUS.totalDomains = len(domains)
-    logger.info("Startup complete", {"domains": len(domains), "jobs_loaded": len(saved_jobs)})
+    logger.info(
+        "Startup complete",
+        {"domains": len(domains), "jobs_loaded": len(saved_jobs), "domains_path": settings.DOMAINS_FILE_PATH},
+    )
 
 
 @app.on_event("startup")
