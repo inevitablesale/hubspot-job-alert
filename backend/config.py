@@ -51,7 +51,9 @@ class Settings(BaseSettings):
         ]
     )
 
-    @field_validator("HUBSPOT_ROLE_KEYWORDS", "HUBSPOT_EXCLUDE_KEYWORDS", pre=True)
+    @field_validator(
+        "HUBSPOT_ROLE_KEYWORDS", "HUBSPOT_EXCLUDE_KEYWORDS", mode="before"
+    )
     def _split_keywords(cls, value):
         if isinstance(value, str):
             return [item.strip().lower() for item in value.split(",") if item.strip()]
