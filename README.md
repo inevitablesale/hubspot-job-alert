@@ -37,7 +37,7 @@ Render uses the provided commands:
 
 ### Configuration
 - `DOMAINS_FILE` points to the source of truth for the domains to crawl. It must be provided via the deployment secret at `/etc/secrets/DOMAINS_FILE` (or by setting the `DOMAINS_FILE` environment variable). Records are upserted into SQLite on startup.
-- SQLite database lives at `data/jobs.db` and is created automatically.
+- SQLite database lives at `/data/jobs.db` (override with `DATA_DIR`) so runs persist across restarts.
 - Logs are written to stdout and `data/logs.txt` (rotating at 5MB).
 
 ## Frontend features

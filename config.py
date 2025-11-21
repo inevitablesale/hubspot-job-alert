@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
-DATA_DIR = BASE_DIR / "data"
+# Persist the crawl database on Render's /data volume so runs survive restarts and redeploys.
+DATA_DIR = Path(os.getenv("DATA_DIR", "/data"))
 # DOMAINS_FILE must come from the deployment secret (defaulting to Render's /etc/secrets/DOMAINS_FILE).
 DOMAINS_FILE = Path(os.getenv("DOMAINS_FILE", "/etc/secrets/DOMAINS_FILE"))
 DATABASE_FILE = DATA_DIR / "jobs.db"
