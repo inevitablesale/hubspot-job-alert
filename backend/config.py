@@ -1,11 +1,19 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import List
 
 from pydantic import BaseSettings, Field, validator
 
 
+SECRET_DOMAINS_PATH = Path("/etc/secrets/DOMAINS_FILE")
+
+
 class Settings(BaseSettings):
-    DOMAINS_FILE_PATH: str = "domains.json"
+    DOMAINS_FILE_PATH: str = (
+        str(SECRET_DOMAINS_PATH)
+        if SECRET_DOMAINS_PATH.exists()
+        else "domains.json"
+    )
     PORT: int = 8000
     HUBSPOT_ROLE_KEYWORDS: List[str] = Field(
         default_factory=lambda: [

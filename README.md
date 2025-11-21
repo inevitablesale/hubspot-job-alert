@@ -10,12 +10,13 @@ Monitor partner domains for HubSpot-related job postings. The system discovers r
 cd backend
 pip install -r ../requirements.txt
 # Optional: point at a custom domains file; defaults to ../domains.json in the repo root
+# When running on Render with a Secret File named DOMAINS_FILE, it is auto-read from /etc/secrets/DOMAINS_FILE
 export DOMAINS_FILE_PATH=../domains.json
 uvicorn backend.main:app --reload
 ```
 
-* Render start command: `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
-* Defaults to `domains.json` in the repo root; override with `DOMAINS_FILE_PATH` for your own list.
+* Render start command: `uvicorn server:app --host 0.0.0.0 --port $PORT`
+* Defaults to `domains.json` in the repo root or `/etc/secrets/DOMAINS_FILE` when provided as a Secret File; override with `DOMAINS_FILE_PATH` for your own list.
 
 ### Endpoints
 
@@ -48,5 +49,7 @@ The dashboard lets you trigger crawls, preview careers pages, export jobs to CSV
 
 - Build command: `./postinstall.sh` (install dependencies; add frontend build if desired)
 - Start command: `uvicorn server:app --host 0.0.0.0 --port $PORT` (import shim for Render defaults; `backend.main:app` also works)
+
+If using a Render Secret File named `DOMAINS_FILE`, it will be mounted at `/etc/secrets/DOMAINS_FILE` and is read automatically without additional configuration.
 
 The backend listens on the `PORT` environment variable for Render compatibility.
