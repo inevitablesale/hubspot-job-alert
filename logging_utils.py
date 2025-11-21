@@ -12,7 +12,6 @@ LOG_FILE = DATA_DIR / "logs.txt"
 
 def configure_logging() -> None:
     """Configure application-wide logging."""
-    DATA_DIR.mkdir(exist_ok=True)
     handlers: List[logging.Handler] = [logging.StreamHandler()]
     try:
         LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
