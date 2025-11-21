@@ -129,12 +129,24 @@ body {
   margin-top: 1.5rem;
 }
 
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
 .panel {
   background: rgba(15, 23, 42, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 1rem 1.25rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.panel.emphasis {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 25px 80px rgba(37, 99, 235, 0.25);
 }
 
 .card {
@@ -422,6 +434,26 @@ tr:hover td {
   border: 1px solid rgba(255, 255, 255, 0.08);
   font-family: 'IBM Plex Mono', SFMono-Regular, Menlo, monospace;
   font-size: 0.85rem;
+}
+
+.panel-logs .logs {
+  max-height: 320px;
+}
+
+.panel-logs h3 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.panel-logs h3::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
 }
 
 .muted { color: #94a3b8; }

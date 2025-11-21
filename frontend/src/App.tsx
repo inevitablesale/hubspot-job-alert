@@ -96,12 +96,15 @@ function App() {
         </div>
       </div>
 
-      <div className="grid">
-        <div className="panel">
+      <div className="telemetry-grid">
+        <div className="panel emphasis">
           <RunControls onRun={startRun} domains={domains.length} isRunning={status.status === 'running'} />
         </div>
         <div className="panel">
           <StatusPanel status={status} />
+        </div>
+        <div className="panel panel-logs">
+          <LogsPanel />
         </div>
       </div>
 
@@ -129,9 +132,6 @@ function App() {
 
       <div className="panel">
         <JobsTable jobs={filteredJobs} />
-      </div>
-      <div className="panel">
-        <LogsPanel />
       </div>
     </div>
   )

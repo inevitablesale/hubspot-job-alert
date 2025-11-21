@@ -14,7 +14,7 @@ const LogsPanel = () => {
 
   return (
     <div className="card">
-      <h3>Recent Logs</h3>
+      <h3>Live crawl logs</h3>
       <pre className="logs">{logs || 'No logs yet'}</pre>
     </div>
   )
