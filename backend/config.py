@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 SECRET_DOMAINS_PATH = Path("/etc/secrets/DOMAINS_FILE")
@@ -57,9 +57,7 @@ class Settings(BaseSettings):
             return [item.strip().lower() for item in value.split(",") if item.strip()]
         return [item.lower() for item in value]
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 
 
 @lru_cache(maxsize=1)
