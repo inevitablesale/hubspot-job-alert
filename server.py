@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 from typing import List, Optional
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -41,6 +41,9 @@ app.add_middleware(
 )
 
 current_crawl_task: Optional[asyncio.Task] = None
+# Central queue to keep crawl work alive even after the HTTP request returns.
+run_queue: asyncio.Queue[tuple[int, Optional[List[str]]]] = asyncio.Queue()
+worker_task: Optional[asyncio.Task] = None
 
 
 @app.on_event("startup")
@@ -52,6 +55,11 @@ def startup_event() -> None:
     logger.info("Loaded %d domains from %s", len(domains), DOMAINS_FILE)
     if FRONTEND_DIST.exists():
         STATIC_DIR.mkdir(exist_ok=True)
+    # Launch a persistent worker so Render cannot garbage-collect background tasks.
+    global worker_task
+    loop = asyncio.get_event_loop()
+    if worker_task is None or worker_task.done():
+        worker_task = loop.create_task(crawl_worker())
 
 
 async def crawl_domains(run_id: int, domain_filters: Optional[List[str]]) -> None:
@@ -100,13 +108,48 @@ async def crawl_domains(run_id: int, domain_filters: Optional[List[str]]) -> Non
         )
 
 
+async def crawl_worker() -> None:
+    """Persistent worker that processes crawl requests sequentially.
+
+    Render can drop background tasks spawned per-request. This worker lives for
+    the lifetime of the process and pulls jobs from a queue so crawls continue
+    after the HTTP response returns.
+    """
+    logger.info("Crawl worker booted and awaiting tasks")
+    while True:
+        run_id, domain_filters = await run_queue.get()
+        logger.info("Starting queued crawl run %s", run_id)
+        try:
+            global current_crawl_task
+            current_crawl_task = asyncio.current_task()
+            await crawl_domains(run_id, domain_filters)
+        except Exception as exc:  # noqa: BLE001
+            logger.exception("Crawl run %s failed: %s", run_id, exc)
+            update_run_status(
+                run_id,
+                status="failed",
+                finished_at=datetime.utcnow().isoformat(),
+                current_domain=None,
+            )
+        finally:
+            run_queue.task_done()
+            current_crawl_task = None
+
+
 @app.post("/api/run", response_model=RunResponse)
 async def run_crawl(request: CrawlRequest) -> RunResponse:
     global current_crawl_task
+    # If a crawl is already running, refuse to enqueue another to avoid overlap.
     if current_crawl_task and not current_crawl_task.done():
         raise HTTPException(status_code=400, detail="Crawl already running")
+
     run_id = create_run()
-    current_crawl_task = asyncio.create_task(crawl_domains(run_id, request.domains))
+    logger.info("Run %s enqueued with %d domain filters", run_id, len(request.domains or []))
+    await run_queue.put((run_id, request.domains))
+
+    # Track currently executing task handle for status checks; when the queue
+    # worker picks up the item, it will replace this handle.
+    current_crawl_task = worker_task
     status = get_status(run_id)
     return RunResponse(run_id=run_id, started_at=status.startedAt or datetime.utcnow())
 
