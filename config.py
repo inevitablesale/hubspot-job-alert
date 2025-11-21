@@ -9,6 +9,9 @@ DOMAINS_FILE = Path(os.getenv("DOMAINS_FILE", "/etc/secrets/DOMAINS_FILE"))
 DATABASE_FILE = DATA_DIR / "jobs.db"
 STATIC_DIR = BASE_DIR / "static"
 FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
+PLAYWRIGHT_BROWSERS_PATH = Path(
+    os.getenv("PLAYWRIGHT_BROWSERS_PATH", BASE_DIR / ".playwright-browsers")
+)
 
 DEFAULT_CRAWL_CONCURRENCY = 1
 REQUEST_TIMEOUT = 15000

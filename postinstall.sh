@@ -4,9 +4,10 @@ set -euo pipefail
 python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# Install Playwright browsers without attempting system-level package installs
-# Render builds run without sudo, so avoid --with-deps to prevent failures.
-PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-/tmp/playwright-browsers}
+# Install Playwright browsers without attempting system-level package installs.
+# We install into a project-local directory so the artifacts are present in the
+# final deploy image instead of ephemeral /tmp storage.
+PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-$(pwd)/.playwright-browsers}
 export PLAYWRIGHT_BROWSERS_PATH
 python -m playwright install chromium || true
 

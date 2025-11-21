@@ -5,10 +5,11 @@ from contextlib import asynccontextmanager
 from playwright.async_api import async_playwright, BrowserContext
 
 # Ensure Playwright uses the same browser cache path at runtime that we used during
-# postinstall. Render builds install browsers into /tmp/playwright-browsers, so we
-# point the runtime lookup there if the environment is not already configured.
-os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", "/tmp/playwright-browsers")
-from config import REQUEST_TIMEOUT
+# postinstall. We keep the path inside the deployed bundle so the downloaded
+# browsers are available at runtime instead of in ephemeral /tmp storage.
+from config import PLAYWRIGHT_BROWSERS_PATH, REQUEST_TIMEOUT
+
+os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(PLAYWRIGHT_BROWSERS_PATH))
 
 
 @asynccontextmanager
