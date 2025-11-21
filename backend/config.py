@@ -2,7 +2,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import List
 
-from pydantic import BaseSettings, Field, validator
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings
 
 
 SECRET_DOMAINS_PATH = Path("/etc/secrets/DOMAINS_FILE")
@@ -50,7 +51,7 @@ class Settings(BaseSettings):
         ]
     )
 
-    @validator("HUBSPOT_ROLE_KEYWORDS", "HUBSPOT_EXCLUDE_KEYWORDS", pre=True)
+    @field_validator("HUBSPOT_ROLE_KEYWORDS", "HUBSPOT_EXCLUDE_KEYWORDS", pre=True)
     def _split_keywords(cls, value):
         if isinstance(value, str):
             return [item.strip().lower() for item in value.split(",") if item.strip()]
