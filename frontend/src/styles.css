@@ -1,0 +1,119 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: #1f2933;
+  background-color: #f7f9fb;
+}
+
+body {
+  margin: 0;
+  background: #f7f9fb;
+}
+
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header h1 {
+  margin: 0 0 16px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid-two {
+  grid-template-columns: 2fr 1fr;
+}
+
+.button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.button.primary {
+  background: #ff7a59;
+  color: #fff;
+}
+
+.button.secondary {
+  background: #e5e7eb;
+  color: #1f2933;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.badge.green {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.badge.gray {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.logs {
+  max-height: 240px;
+  overflow: auto;
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.domain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.domain-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.domain-list li.active {
+  color: #ff7a59;
+  font-weight: 700;
+}
+
+.domain-list button {
+  margin-top: 8px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
