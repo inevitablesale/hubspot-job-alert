@@ -83,7 +83,12 @@ def init_db() -> None:
 
 
 def load_domains_from_file() -> List[Domain]:
-    data = json.loads(Path(DOMAINS_FILE).read_text())
+    domains_path = Path(DOMAINS_FILE)
+    if not domains_path.exists():
+        raise FileNotFoundError(
+            f"DOMAINS_FILE not found at {domains_path}. Provide the deployment secret or set the DOMAINS_FILE environment variable."
+        )
+    data = json.loads(domains_path.read_text())
     return [Domain(**item) for item in data]
 
 
