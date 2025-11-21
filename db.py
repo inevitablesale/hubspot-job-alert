@@ -117,7 +117,7 @@ def upsert_domains(domains: Iterable[Domain]) -> None:
                 domain.city,
                 domain.state,
                 domain.countryCode,
-                domain.website,
+                str(domain.website) if domain.website is not None else None,
                 domain.phone,
                 domain.categoryName,
                 domain.url,

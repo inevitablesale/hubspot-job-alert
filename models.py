@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 
 
 class Domain(BaseModel):
@@ -15,7 +15,7 @@ class Domain(BaseModel):
     city: Optional[str] = None
     state: Optional[str] = None
     countryCode: Optional[str] = None
-    website: Optional[HttpUrl] = None
+    website: Optional[str] = None
     phone: Optional[str] = None
     categoryName: Optional[str] = None
     url: Optional[str] = None
