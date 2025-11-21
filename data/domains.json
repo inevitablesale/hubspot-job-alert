@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Hypha HubSpot Development",
+    "totalScore": 5,
+    "reviewsCount": 12,
+    "street": "575 Underhill Blvd Suite 216",
+    "city": "Syosset",
+    "state": "New York",
+    "countryCode": "US",
+    "website": "https://www.hyphadev.io/",
+    "phone": "(516) 284-3300",
+    "categoryName": "Marketing agency",
+    "url": "https://www.google.com/maps/search/?api=1&query=Hypha%20HubSpot%20Development&query_place_id=ChIJMRHI3oV9wokRHj6VSB1d5Fc"
+  },
+  {
+    "title": "HubSpot",
+    "totalScore": 3.9,
+    "reviewsCount": 157,
+    "street": "2 Canal Park",
+    "city": "Cambridge",
+    "state": "Massachusetts",
+    "countryCode": "US",
+    "website": "https://www.hubspot.com/",
+    "phone": "(877) 929-0687",
+    "categoryName": "Software company",
+    "url": "https://www.google.com/maps/search/?api=1&query=HubSpot&query_place_id=ChIJ5VAeJrxw44kRJlpQfUOoy_M"
+  },
+  {
+    "title": "ClearPivot",
+    "totalScore": null,
+    "reviewsCount": 0,
+    "street": "3118 Red Fern Dr NW",
+    "city": "Olympia",
+    "state": "Washington",
+    "countryCode": "US",
+    "website": "http://www.clearpivot.com/",
+    "phone": "(720) 515-4476",
+    "categoryName": "Marketing agency",
+    "url": "https://www.google.com/maps/search/?api=1&query=ClearPivot&query_place_id=ChIJx4bi-2ufkVQRLlvW4S_g0KQ"
+  }
+]
