@@ -13,7 +13,6 @@ function App() {
   const [domains, setDomains] = useState<Domain[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
   const [status, setStatus] = useState<CrawlStatus>({ status: 'idle', domainsTotal: 0, domainsCompleted: 0, jobsFound: 0, errorCount: 0 })
-  const [activeRunId, setActiveRunId] = useState<number | undefined>()
   const [minScore, setMinScore] = useState(0)
   const [remoteOnly, setRemoteOnly] = useState(false)
   const [search, setSearch] = useState('')
@@ -31,6 +30,16 @@ function App() {
     }
   }, [status.status, status.runId])
 
+  useEffect(() => {
+    if (status.status === 'running' && status.runId) {
+      const timer = setInterval(() => fetchResults(status.runId), 4000)
+      return () => clearInterval(timer)
+    }
+    if (status.status === 'completed' && status.runId) {
+      fetchResults(status.runId)
+    }
+  }, [status.status, status.runId])
+
   const fetchStatus = (runId?: number) => {
     axios.get(`${API_BASE}/status`, { params: { run_id: runId } })
       .then(res => setStatus(res.data))
@@ -44,10 +53,11 @@ function App() {
   }
 
   const startRun = () => {
+    setJobs([])
     axios.post(`${API_BASE}/run`, {})
       .then(res => {
-        setActiveRunId(res.data.run_id)
         fetchStatus(res.data.run_id)
+        fetchResults(res.data.run_id)
       })
       .catch(err => alert(err.response?.data?.detail || 'Failed to start crawl'))
   }
@@ -88,7 +98,7 @@ function App() {
 
       <div className="grid">
         <div className="panel">
-          <RunControls onRun={startRun} domains={domains.length} />
+          <RunControls onRun={startRun} domains={domains.length} isRunning={status.status === 'running'} />
         </div>
         <div className="panel">
           <StatusPanel status={status} />
